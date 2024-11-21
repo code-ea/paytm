@@ -42,7 +42,7 @@ export const SendMoney = () => {
                     />
                     </div>
                     <button onClick={() => {
-                        axios.post("https://paytm-vercel.vercel.app/api/v1/account/transfer", {
+                        axios.post("https://paytm-nu-pink.vercel.app//api/v1/account/transfer", {
                             to: id,
                             amount
                         }, {
