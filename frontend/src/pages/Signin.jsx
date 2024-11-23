@@ -26,7 +26,7 @@ export const Signin = () => {
         }}/>
         <div className="pt-4">
           <Button label={"Sign in"} onClick={async () => {
-            axios.post("https://paytm-4ebbc7j9d-code-eas-projects.vercel.app/api/v1/user/signin", {
+            axios.post("https://paytm-nu-pink.vercel.app/api/v1/user/signin", {
               username,
               password
             }).then((response) => {

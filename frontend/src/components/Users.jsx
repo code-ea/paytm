@@ -11,7 +11,7 @@ export const Users = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        axios.get("https://paytm-4ebbc7j9d-code-eas-projects.vercel.app/api/v1/user/bulk?filter=" + filter)
+        axios.get("https://paytm-nu-pink.vercel.app/api/v1/user/bulk?filter=" + filter)
             .then(response => {
                 setUsers(response.data.user)
             })
