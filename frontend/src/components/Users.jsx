@@ -8,9 +8,10 @@ export const Users = () => {
     // Replace with backend call
     const [users, setUsers] = useState([]);
     const [filter, setFilter] = useState("");
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
-        axios.get("https://paytm-nu-pink.vercel.app/api/v1/user/bulk?filter=" + filter)
+        axios.get("https://paytm-4ebbc7j9d-code-eas-projects.vercel.app/api/v1/user/bulk?filter=" + filter)
             .then(response => {
                 setUsers(response.data.user)
             })
@@ -28,6 +29,10 @@ export const Users = () => {
         <div>
             {users.map(user => <User user={user} />)}
         </div>
+        <Button onClick={(e) => {
+            localStorage.removeItem("token");
+            navigate("/signin");
+        }} label={"Sign out"}/>
     </>
 }
 

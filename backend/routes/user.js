@@ -58,30 +58,32 @@ router.post("/signin", async (req , res) => {
     const parsedSigninPayload = signinBody.safeParse(signinPayload);
 
     if(!parsedSigninPayload.success){
-        res.send(411).json({
+        return res.status(400).json({
             message: "Incorrect inputs"
         })
     }
 
     const user = await User.findOne({
         username: req.body.username,
-        password: req.body.password
     })
 
-    if(user){
-        const token = jwt.sign({
-            userId: user._id
-        }, JWT_SECRET)
+    if (user && req.body.password == user.password) {
+        const token = jwt.sign(
+            { userId: user._id }, // Payload
+            JWT_SECRET            // Secret key
+        );
 
-        res.json({
-            token: token,
-        })
-        return;
+        return res.json({ token });
     }
-
-    res.send(411).json({
-        message: "Error while logging in"
-    })
+    else if (req.body.password !== user.password) {
+        return res.status(401).json({ message: "Invalid password" });
+      } 
+    else {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
+    
 })
 
 router.put("/", authMiddleware, async(req, res) => {
