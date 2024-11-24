@@ -32,21 +32,7 @@ export const Signin = () => {
             }).then((response) => {
               localStorage.setItem("token", response.data.token);
               navigate("/dashboard");
-            }).catch((error) => {
-              if (error.response) {
-              // Server responded with a status code outside the range of 2xx
-                console.error("Error:", error.response.data.message || "Sign-in failed");
-                alert(error.response.data.message || "Invalid credentials");
-              } else if (error.request) {
-                // No response received from server
-                console.error("Error: No response received from server.");
-                alert("Unable to connect to the server. Please try again later.");
-              } else {
-                // Something else went wrong while setting up the request
-                console.error("Error:", error.message);
-                alert("An unexpected error occurred. Please try again.");
-              }
-            });
+            })
           }} />
         </div>
         <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/signup"} />

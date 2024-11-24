@@ -42,7 +42,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
             });
         }
 
-        if(amount < 0){
+        if(amount < 0 || amount == 0){
             await session.abortTransaction();
             return res.status(400).json({
                 message: "Enter a valid amount"
