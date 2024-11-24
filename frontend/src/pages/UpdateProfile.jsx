@@ -46,8 +46,8 @@ export const UpdateProfile = () => {
                 },
             }
             );
-            navigate("/dashboard")
-            alert("Updated successfully")
+            alert("Updated successfully");
+            navigate("/dashboard");
           }} label={"Update"} />
         </div>
         <BottomWarning label={"Try signin with new credentials"} buttonText={"Sign in"} to={"/signin"} />

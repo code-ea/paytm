@@ -112,7 +112,7 @@ router.put("/edit",authMiddleware, async(req, res) => {
     try {
         const updatePayload = req.body;
         const parsedUpdatePayload = updateBody.safeParse(updatePayload);
-        console.log("Payload received:", req.body);
+        //console.log("Payload received:", req.body);
 
         if(!parsedUpdatePayload.success){
             console.log("Parsed payload:", parsedUpdatePayload);
@@ -122,10 +122,10 @@ router.put("/edit",authMiddleware, async(req, res) => {
         }
 
         await User.updateOne({_id:req.userId}, req.body);
-        console.log(req.userId);
+        //console.log(req.userId);
 
         const result = await User.updateOne({ _id: req.userId }, req.body);
-        console.log("Database update result:", result);
+        //console.log("Database update result:", result);
 
         return res.json({
             message: "Updated successfully"
