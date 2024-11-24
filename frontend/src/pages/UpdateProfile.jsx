@@ -46,7 +46,7 @@ export const UpdateProfile = () => {
                 },
             }
             );
-            //navigate("/dashboard")
+            navigate("/dashboard")
             alert("Updated successfully")
           }} label={"Update"} />
         </div>
