@@ -4,6 +4,7 @@ import { Signup } from "./pages/Signup";
 import { Dashboard } from "./pages/Dashboard";
 import { SendMoney } from "./pages/SendMoney";
 import { Me } from "./pages/Me"
+import { UpdateProfile } from "./pages/UpdateProfile";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/send" element={<SendMoney/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/" element={<Me/>}/>
+            <Route path="/edit" element={<UpdateProfile/>}/>
           </Routes>
         </BrowserRouter>
     </div>

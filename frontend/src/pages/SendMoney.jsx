@@ -49,6 +49,12 @@ export const SendMoney = () => {
                             headers: {
                                 Authorization: "Bearer " + localStorage.getItem("token")
                             }
+                        }).then((response) => {
+                            alert("Rs." + amount + " sent successfully")
+                        }).catch((error) => {
+                            if(error.response){
+                                alert(error.response.data.message )
+                            }
                         })
                     }} className="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">
                         Initiate Transfer

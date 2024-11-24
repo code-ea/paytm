@@ -32,7 +32,7 @@ export const Users = () => {
         <Button onClick={(e) => {
             localStorage.removeItem("token");
             navigate("/signin");
-        }} label={"Sign out"}/>
+        }} label={"Sign out"} className={`place-self-start`}/>
     </>
 }
 
