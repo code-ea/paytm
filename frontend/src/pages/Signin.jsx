@@ -6,6 +6,7 @@ import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import {useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 export const Signin = () => {
 
@@ -32,6 +33,8 @@ export const Signin = () => {
             }).then((response) => {
               localStorage.setItem("token", response.data.token);
               navigate("/dashboard");
+            }).catch((error)=>{
+              toast.error(error.response.data.message)
             })
           }} />
         </div>

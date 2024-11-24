@@ -5,11 +5,13 @@ import { Dashboard } from "./pages/Dashboard";
 import { SendMoney } from "./pages/SendMoney";
 import { Me } from "./pages/Me"
 import { UpdateProfile } from "./pages/UpdateProfile";
+import { Toaster } from 'sonner';
 
 function App() {
 
   return (
     <div>
+        <Toaster/>
         <BrowserRouter>
           <Routes>
             <Route path="/signin" element={<Signin/>}/>

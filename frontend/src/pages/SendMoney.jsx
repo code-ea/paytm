@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import axios from "axios";
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export const SendMoney = () => {
     const [searchParams] = useSearchParams();
@@ -50,10 +51,10 @@ export const SendMoney = () => {
                                 Authorization: "Bearer " + localStorage.getItem("token")
                             }
                         }).then((response) => {
-                            alert("Rs." + amount + " sent successfully")
+                            toast.success("Rs." + amount + " sent successfully")
                         }).catch((error) => {
                             if(error.response){
-                                alert(error.response.data.message )
+                                toast.error(error.response.data.message )
                             }
                         })
                     }} className="justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white">

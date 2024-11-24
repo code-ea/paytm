@@ -6,6 +6,7 @@ import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 export const UpdateProfile = () => {
     const [firstName, setFirstName] = useState("");
@@ -46,8 +47,7 @@ export const UpdateProfile = () => {
                 },
             }
             );
-            
-            alert("Updated successfully");
+            toast.success("Updated successfully");
             navigate("/dashboard");
           }} label={"Update"} />
         </div>
