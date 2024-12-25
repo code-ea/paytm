@@ -30,7 +30,7 @@ export const Signup = () => {
         }} placeholder="harkirat@gmail.com" label={"Email"} />
         <InputBox onchange={(e) => {
           setPassword(e.target.value)
-        }} placeholder="123456" label={"Password"} />
+        }} type="password" placeholder="123456" label={"Password"} />
         <div className="pt-4">
           <Button onClick={async () => {
             const response = await axios.post("https://paytm-nu-pink.vercel.app/api/v1/user/signup", {
