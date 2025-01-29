@@ -7,6 +7,7 @@ import { SubHeading } from "../components/SubHeading"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import {Navbar} from "../components/Navbar";
 
 export const UpdateProfile = () => {
     const [firstName, setFirstName] = useState("");
@@ -26,7 +27,10 @@ export const UpdateProfile = () => {
         return null; 
     }
 
-    return <div className="bg-slate-300 h-screen flex justify-center">
+    return (
+      <div>
+        <Navbar/>
+        <div className="bg-slate-300 h-screen flex justify-center">
     <div className="flex flex-col justify-center">
       <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
         <Heading label={"Update Details"} />
@@ -66,4 +70,6 @@ export const UpdateProfile = () => {
       </div>
     </div>
   </div>
+      </div>
+    );
 }

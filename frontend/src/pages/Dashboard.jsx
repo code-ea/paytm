@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"; // Import useState and useEffect ho
 import { Appbar } from "../components/Appbar";
 import { Balance } from "../components/Balance";
 import { Users } from "../components/Users";
+import {Navbar} from "../components/Navbar";
 
 export const Dashboard = () => {
     const navigate = useNavigate();
@@ -19,7 +20,8 @@ export const Dashboard = () => {
     }
 
     return <div>
-        <Appbar />
+        
+        <Navbar/>
         <div className="m-8">
             <Balance value={"10,000"} />
             <Users />
