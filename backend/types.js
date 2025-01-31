@@ -2,7 +2,7 @@ const zod = require("zod");
 
 const signupBody = zod.object({
     username: zod.string().email(),
-    firstName: zod.string(),
+    firstName: zod.string().min(1).regex(/^[a-zA-Z]+$/).email(),
     lastName: zod.string(),
     password: zod.string()
 })
