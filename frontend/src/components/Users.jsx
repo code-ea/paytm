@@ -2,25 +2,32 @@ import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Loader.css";
 
 export const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://paytm-nu-pink.vercel.app/api/v1/user/bulk?filter=" + filter)
       .then((response) => {
         setUsers(response.data.user);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [filter]);
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-6 bg-gray-50 rounded-xl shadow-lg">
-      <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
-        Users
-      </h2>
+    <div className="max-w-4xl mx-auto py-8 px-6 bg-gray-50 rounded-xl shadow-lg relative">
+      <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">Users</h2>
 
       {/* Search Input */}
       <div className="mb-6">
@@ -32,12 +39,25 @@ export const Users = () => {
         />
       </div>
 
+      {/* Loading Animation */}
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-700 rounded-lg">
+          <div className="loader">
+            <div className="inner one"></div>
+            <div className="inner two"></div>
+            <div className="inner three"></div>
+          </div>
+        </div>
+      )}
+
       {/* User List */}
-      <div className="space-y-4">
-        {users.map((user) => (
-          <User key={user._id} user={user} />
-        ))}
-      </div>
+      {!loading && (
+        <div className="space-y-4">
+          {users.map((user) => (
+            <User key={user._id} user={user} />
+          ))}
+        </div>
+      )}
 
       {/* Sign Out Button */}
       <div className="flex justify-center mt-8">
