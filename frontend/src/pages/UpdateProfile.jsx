@@ -79,7 +79,7 @@ export const UpdateProfile = () => {
 
           {/* First Name Input */}
           <InputBox
-            placeholder="John"
+            placeholder="Nitin"
             label={"First Name"}
             onchange={(e) => setFirstName(e.target.value)}
             className="mt-6"
@@ -87,7 +87,7 @@ export const UpdateProfile = () => {
 
           {/* Last Name Input */}
           <InputBox
-            placeholder="Doe"
+            placeholder="Singh"
             label={"Last Name"}
             onchange={(e) => setLastName(e.target.value)}
             className="mt-4"
@@ -95,7 +95,7 @@ export const UpdateProfile = () => {
 
           {/* Email Input */}
           <InputBox
-            placeholder="harkirat@gmail.com"
+            placeholder="nitin@gmail.com"
             label={"Email"}
             onchange={(e) => setUsername(e.target.value)}
             className="mt-4"

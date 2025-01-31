@@ -44,7 +44,7 @@ export const Signin = () => {
 
           {/* Email Input */}
           <InputBox
-            placeholder="harkirat@gmail.com"
+            placeholder="nitin@gmail.com"
             label={"Email"}
             onchange={(e) => setUsername(e.target.value)}
             className="mt-6"

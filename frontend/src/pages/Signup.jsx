@@ -64,7 +64,7 @@ export const Signup = () => {
 
           {/* First Name */}
           <InputBox
-            placeholder="John"
+            placeholder="Nitin"
             label={"First Name"}
             onchange={(e) => setFirstName(e.target.value)}
             className="mb-4"
@@ -72,7 +72,7 @@ export const Signup = () => {
 
           {/* Last Name */}
           <InputBox
-            placeholder="Doe"
+            placeholder="Singh"
             label={"Last Name"}
             onchange={(e) => setLastName(e.target.value)}
             className="mb-4"
@@ -80,7 +80,7 @@ export const Signup = () => {
 
           {/* Email */}
           <InputBox
-            placeholder="harkirat@gmail.com"
+            placeholder="nitin@gmail.com"
             label={"Email"}
             onchange={(e) => setUsername(e.target.value)}
             className="mb-4"
