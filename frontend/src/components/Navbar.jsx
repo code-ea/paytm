@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
-    <nav className="bg-blue-600 p-4 shadow-md group">
+    <nav className="bg-blue-600 p-2 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <h1 className="text-white text-2xl font-bold">Paytm Clone</h1>
@@ -26,7 +26,7 @@ export const Navbar = () => {
             <button className="text-white text-lg font-bold hover:text-gray-200 focus:outline-none">
               Account
             </button>
-            <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-opacity duration-300">
+            <div className="absolute right-0  w-40 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-opacity duration-300">
               <ul>
                 <li>
                   <Link to="/signup" className="block px-4 py-2 text-lg text-blue-600 hover:bg-gray-200">
