@@ -116,11 +116,21 @@ router.put("/edit",authMiddleware, async(req, res) => {
 
         if(!parsedUpdatePayload.success){
             console.log("Parsed payload:", parsedUpdatePayload);
-            return res.send(406).json({
+            return res.status(406).json({
                 message: "Error while updating information"
             })
         }
 
+        const existingUser = await User.findOne({
+            username: req.body.username
+        })
+
+        if(existingUser){
+            return res.status(406).json({
+                message: "Email already taken"
+            })
+        }
+        
         await User.updateOne({_id:req.userId}, req.body);
         //console.log(req.userId);
 

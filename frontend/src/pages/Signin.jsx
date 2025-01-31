@@ -34,7 +34,7 @@ export const Signin = () => {
   return (
     <div>
       <Navbar />
-      <div className="h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 relative">
+      <div className="h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600">
         <div className="w-full max-w-md p-8 bg-white bg-opacity-80 backdrop-blur-xl shadow-2xl rounded-3xl relative">
           <Heading label={"Sign in"} className="text-pink-600 text-4xl font-bold text-center shadow-md mb-4" />
           <SubHeading

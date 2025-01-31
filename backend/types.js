@@ -13,6 +13,7 @@ const signinBody = zod.object({
 })
 
 const updateBody = zod.object({
+    username: zod.string().min(1).regex(/^[a-zA-Z]+$/).email(),
     firstName: zod.string(),
     lastName: zod.string(),
     password: zod.string()
