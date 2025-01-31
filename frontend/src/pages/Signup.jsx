@@ -33,14 +33,6 @@ export const Signup = () => {
       toast.error("Last name must contain only letters");
       return;
     }
-    if (!username) {
-      toast.error("Email cannot be empty");
-      return;
-    }
-    if (!password) {
-      toast.error("Password cannot be empty");
-      return;
-    }
 
     setLoading(true);
     try {
