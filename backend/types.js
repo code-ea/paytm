@@ -2,9 +2,9 @@ const zod = require("zod");
 
 const signupBody = zod.object({
     username: zod.string().email(),
-    firstName: zod.string().min(1).regex(/^[a-zA-Z]+$/).email(),
-    lastName: zod.string(),
-    password: zod.string()
+    firstName: zod.string().min(1).regex(/^[a-zA-Z]+$/),
+    lastName: zod.string().min(1).regex(/^[a-zA-Z]+$/),
+    password: zod.string().min(6),
 })
 
 const signinBody = zod.object({
@@ -14,9 +14,9 @@ const signinBody = zod.object({
 
 const updateBody = zod.object({
     username: zod.string().min(1).regex(/^[a-zA-Z]+$/).email(),
-    firstName: zod.string(),
-    lastName: zod.string(),
-    password: zod.string()
+    firstName: zod.string().min(1).regex(/^[a-zA-Z]+$/),
+    lastName: zod.string().min(1).regex(/^[a-zA-Z]+$/),
+    password: zod.string().min(6),
 })
 
 module.exports = {
