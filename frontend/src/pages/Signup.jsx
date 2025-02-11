@@ -6,7 +6,6 @@ import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Navbar } from "../components/Navbar";
 import { toast } from "sonner";
 import "../components/Loader.css";
 
@@ -57,8 +56,7 @@ export const Signup = () => {
 
   return (
     <div>
-      <Navbar />
-      <div className="h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+      <div className="h-screen flex justify-center items-center bg-black from-blue-500 via-purple-500 to-pink-500">
         <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl backdrop-blur-md bg-opacity-90 relative">
           <Heading label={"Sign up"} className="text-4xl font-bold text-center text-indigo-600 mb-6" />
           <SubHeading label={"Enter your information to create an account"} className="text-lg text-gray-600 text-center mb-6" />

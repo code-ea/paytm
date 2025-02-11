@@ -18,8 +18,8 @@ export const Balance = ({ value }) => {
   }, [token]);
 
   return (
-    <div className="flex justify-between items-center bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white p-4 rounded-xl shadow-lg">
-      <div className="font-bold text-2xl sm:text-3xl">
+    <div className="flex justify-between items-center bg-neutral-700 text-white p-3 rounded-xl shadow-lg">
+      <div className="font-bold text-xl sm:text-2xl">
         Your Balance:
       </div>
       <div className="font-semibold text-2xl sm:text-3xl ml-4 text-shadow-md">

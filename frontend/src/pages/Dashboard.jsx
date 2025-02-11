@@ -19,7 +19,7 @@ export const Dashboard = () => {
         return null; 
     }
 
-    return <div>
+    return <div className="bg-slate-400">
         
         <Navbar/>
         <div className="m-8">
