@@ -70,7 +70,14 @@ export const Users = () => {
           <div className="flex flex-wrap items-center md:justify-between justify-center">
             <div className="w-full md:w-6/12 px-4 mx-auto text-center">
               <div className="text-sm text-blueGray-500 font-semibold py-1">
-                Dashboard Ends.
+              <Button
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/signin");
+                }}
+                label="Sign out"
+                className="text-blueGray-500 hover:text-gray-800"
+              /> 
               </div>
             </div>
           </div>
