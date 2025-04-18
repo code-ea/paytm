@@ -8,6 +8,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import "../components/Loader.css";
+import { FiUser, FiMail, FiLock, FiArrowRight } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -15,14 +17,17 @@ export const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const navigate = useNavigate();
 
   const isValidName = (name) => /^[A-Za-z]+$/.test(name);
 
-  const handleSignup = async () => {
-    if (firstName == "" || lastName == "" || username == "" || password == "") {
-      toast.error("Fields cannot be empty");
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    
+    if (!firstName || !lastName || !username || !password) {
+      toast.error("All fields are required");
       return;
     }
     if (!isValidName(firstName)) {
@@ -38,14 +43,10 @@ export const Signup = () => {
     try {
       const response = await axios.post(
         "https://paytm-nu-pink.vercel.app/api/v1/user/signup",
-        {
-          username,
-          firstName,
-          lastName,
-          password,
-        }
+        { username, firstName, lastName, password }
       );
       localStorage.setItem("token", response.data.token);
+      toast.success("Account created successfully!");
       navigate("/dashboard");
     } catch (error) {
       toast.error(error.response?.data?.message || "Signup failed");
@@ -55,75 +56,117 @@ export const Signup = () => {
   };
 
   return (
-    <div>
-      <div className="h-screen flex justify-center items-center bg-black from-blue-500 via-purple-500 to-pink-500">
-        <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl backdrop-blur-md bg-opacity-90 relative">
-          <Heading label={"Sign up"} className="text-4xl font-bold text-center text-indigo-600 mb-6" />
-          <SubHeading label={"Enter your information to create an account"} className="text-lg text-gray-600 text-center mb-6" />
-
-          {/* First Name */}
-          <InputBox
-            placeholder="Nitin"
-            label={"First Name"}
-            onchange={(e) => setFirstName(e.target.value)}
-            className="mb-4"
-          />
-
-          {/* Last Name */}
-          <InputBox
-            placeholder="Singh"
-            label={"Last Name"}
-            onchange={(e) => setLastName(e.target.value)}
-            className="mb-4"
-          />
-
-          {/* Email */}
-          <InputBox
-            placeholder="nitin@gmail.com"
-            label={"Email"}
-            onchange={(e) => setUsername(e.target.value)}
-            className="mb-4"
-          />
-
-          {/* Password */}
-          <InputBox
-            placeholder="********"
-            type="password"
-            label={"Password"}
-            onchange={(e) => setPassword(e.target.value)}
-            className="mb-6"
-          />
-
-          {/* Sign Up Button */}
-          <div className="pt-6">
-            <Button
-              onClick={handleSignup}
-              label={"Sign up"}
-              className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-lg"
-              disabled={loading}
-            />
-          </div>
-
-          {/* Loading Spinner */}
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-700 rounded-lg">
-              <div className="loader">
-                <div className="inner one"></div>
-                <div className="inner two"></div>
-                <div className="inner three"></div>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="w-full max-w-md"
+      >
+        <form onSubmit={handleSignup}>
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+            {/* Header */}
+            <div className="p-8 text-center bg-gray-50 border-b border-gray-200">
+              <Heading 
+                label="Create Account"
+                className="text-gray-900"
+              />
+              <SubHeading
+                label="Get started with your Paytm Clone account"
+                className="text-gray-600 mt-2"
+              />
             </div>
-          )}
 
-          {/* Already have an account */}
-          <BottomWarning
-            label={"Already have an account?"}
-            buttonText={"Sign in"}
-            to={"/signin"}
-            className="mt-6 text-center text-gray-600"
-          />
-        </div>
-      </div>
+            {/* Form Content */}
+            <div className="px-8 pb-8">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <InputBox
+                  placeholder="John"
+                  label="First Name"
+                  icon={<FiUser className="text-gray-500" />}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  value={firstName}
+                />
+                <InputBox
+                  placeholder="Doe"
+                  label="Last Name"
+                  icon={<FiUser className="text-gray-500" />}
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={lastName}
+                />
+              </div>
+
+              <InputBox
+                type="email"
+                placeholder="john@example.com"
+                label="Email"
+                icon={<FiMail className="text-gray-500" />}
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+                className="mb-4"
+              />
+
+              <InputBox
+                type="password"
+                placeholder="••••••••"
+                label="Password"
+                icon={<FiLock className="text-gray-500" />}
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                className="mb-6"
+              />
+
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+              >
+                <Button
+                  type="submit"
+                  label={
+                    <div className="flex items-center justify-center">
+                      {loading ? (
+                        <span className="inline-block animate-spin mr-2">
+                          <FiArrowRight />
+                        </span>
+                      ) : (
+                        <>
+                          Create Account
+                          <AnimatePresence>
+                            {isHovered && !loading && (
+                              <motion.span
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                className="ml-2"
+                              >
+                                <FiArrowRight />
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      )}
+                    </div>
+                  }
+                  className={`w-full py-3 text-lg font-medium rounded-lg ${
+                    loading
+                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700 text-white"
+                  }`}
+                  disabled={loading}
+                />
+              </motion.div>
+
+              <BottomWarning
+                label="Already have an account?"
+                buttonText="Sign in"
+                to="/signin"
+                className="mt-6 text-center text-gray-600"
+              />
+            </div>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 };

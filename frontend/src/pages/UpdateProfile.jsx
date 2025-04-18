@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Navbar } from "../components/Navbar";
 import "../components/Loader.css";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiUser, FiMail, FiLock, FiArrowRight, FiCheckCircle } from "react-icons/fi";
 
 export const UpdateProfile = () => {
   const [firstName, setFirstName] = useState("");
@@ -16,20 +18,24 @@ export const UpdateProfile = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (token == null) {
+    if (!token) {
       navigate("/signin");
     }
   }, [token, navigate]);
 
   const isValidName = (name) => /^[A-Za-z]+$/.test(name);
 
-  const handleUpdate = async () => {
-    if (firstName === "" || lastName === "" || username === "" || password === "") {
-      toast.error("Fields cannot be empty");
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    
+    if (!firstName || !lastName || !username || !password) {
+      toast.error("All fields are required");
       return;
     }
     if (!isValidName(firstName)) {
@@ -43,103 +49,167 @@ export const UpdateProfile = () => {
 
     setLoading(true);
     try {
-      const response = await axios.put(
+      await axios.put(
         "https://paytm-nu-pink.vercel.app/api/v1/user/edit",
-        {
-          username,
-          firstName,
-          lastName,
-          password,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token
-          },
-        }
+        { username, firstName, lastName, password },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Updated successfully");
-      navigate("/dashboard");
+      toast.success("Profile updated successfully!");
+      setIsSuccess(true);
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error(error.response?.data?.message || "Failed to update profile");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!token) {
-    return null;
-  }
+  if (!token) return null;
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 via-pink-600 to-red-600">
-        <div className="w-full max-w-md p-8 bg-white bg-opacity-80 backdrop-blur-xl shadow-2xl rounded-3xl relative">
-          <Heading label={"Update Details"} className="text-pink-600 text-4xl font-bold text-center shadow-md mb-4" />
-          <SubHeading label={"Enter your new details to update your account"} className="text-yellow-600 text-lg text-center mt-2 mb-4" />
+      
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full max-w-md"
+        >
+          <AnimatePresence mode="wait">
+            {isSuccess ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-white p-8 rounded-xl shadow-lg text-center"
+              >
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                  <FiCheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                  Profile Updated!
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Your changes have been saved successfully.
+                </p>
+                <Button
+                  onClick={() => navigate("/dashboard")}
+                  label="Back to Dashboard"
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg"
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-white p-8 rounded-xl shadow-lg"
+              >
+                <div className="text-center mb-8">
+                  <Heading 
+                    label="Update Profile"
+                    className="text-gray-900"
+                  />
+                  <SubHeading
+                    label="Update your account information"
+                    className="text-gray-600 mt-2"
+                  />
+                </div>
 
-          {/* First Name Input */}
-          <InputBox
-            placeholder="Nitin"
-            label={"First Name"}
-            onchange={(e) => setFirstName(e.target.value)}
-            className="mt-6"
-          />
+                <form onSubmit={handleUpdate}>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <InputBox
+                      placeholder="John"
+                      label="First Name"
+                      icon={<FiUser className="text-gray-500" />}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      value={firstName}
+                    />
+                    <InputBox
+                      placeholder="Doe"
+                      label="Last Name"
+                      icon={<FiUser className="text-gray-500" />}
+                      onChange={(e) => setLastName(e.target.value)}
+                      value={lastName}
+                    />
+                  </div>
 
-          {/* Last Name Input */}
-          <InputBox
-            placeholder="Singh"
-            label={"Last Name"}
-            onchange={(e) => setLastName(e.target.value)}
-            className="mt-4"
-          />
+                  <InputBox
+                    type="email"
+                    placeholder="john@example.com"
+                    label="Email"
+                    icon={<FiMail className="text-gray-500" />}
+                    onChange={(e) => setUsername(e.target.value)}
+                    value={username}
+                    className="mb-4"
+                  />
 
-          {/* Email Input */}
-          <InputBox
-            placeholder="nitin@gmail.com"
-            label={"Email"}
-            onchange={(e) => setUsername(e.target.value)}
-            className="mt-4"
-          />
+                  <InputBox
+                    type="password"
+                    placeholder="••••••••"
+                    label="Password"
+                    icon={<FiLock className="text-gray-500" />}
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    className="mb-6"
+                  />
 
-          {/* Password Input */}
-          <InputBox
-            type="password"
-            placeholder="••••••"
-            label={"Password"}
-            onchange={(e) => setPassword(e.target.value)}
-            className="mt-4"
-          />
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    onHoverStart={() => setIsHovered(true)}
+                    onHoverEnd={() => setIsHovered(false)}
+                  >
+                    <Button
+                      type="submit"
+                      label={
+                        <div className="flex items-center justify-center">
+                          {loading ? (
+                            <span className="inline-block animate-spin mr-2">
+                              <FiArrowRight />
+                            </span>
+                          ) : (
+                            <>
+                              Update Profile
+                              <AnimatePresence>
+                                {isHovered && !loading && (
+                                  <motion.span
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -10 }}
+                                    className="ml-2"
+                                  >
+                                    <FiArrowRight />
+                                  </motion.span>
+                                )}
+                              </AnimatePresence>
+                            </>
+                          )}
+                        </div>
+                      }
+                      className={`w-full py-3 text-lg font-medium rounded-lg ${
+                        loading
+                          ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
+                      }`}
+                      disabled={loading}
+                    />
+                  </motion.div>
+                </form>
 
-          {/* Update Button */}
-          <div className="pt-6">
-            <Button
-              label={"Update"}
-              className="w-full bg-gradient-to-r from-pink-500 to-red-600 hover:from-pink-600 hover:to-red-700 text-white py-3 px-5 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-              onClick={handleUpdate}
-              disabled={loading}
-            />
-          </div>
-
-          {/* Loading Spinner */}
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-700 rounded-lg">
-              <div className="loader">
-                <div className="inner one"></div>
-                <div className="inner two"></div>
-                <div className="inner three"></div>
-              </div>
-            </div>
-          )}
-
-          {/* Sign in Prompt */}
-          <BottomWarning
-            label={"Try signing in with new credentials"}
-            buttonText={"Sign in"}
-            to={"/signin"}
-            className="mt-4 text-center text-white"
-          />
-        </div>
+                <BottomWarning
+                  label="Want to test your new credentials?"
+                  buttonText="Sign in"
+                  to="/signin"
+                  className="mt-6 text-center text-gray-600"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </div>
   );

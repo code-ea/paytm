@@ -1,113 +1,148 @@
 import { useEffect, useState } from "react";
-import { Button } from "./Button";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Loader.css";
+import { Button } from "./Button";
+import { FiSearch, FiUser, FiSend, FiLogOut } from "react-icons/fi";
 
 export const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
+  const [searchFocus, setSearchFocus] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("https://paytm-nu-pink.vercel.app/api/v1/user/bulk?filter=" + filter)
-      .then((response) => {
-        setUsers(response.data.user);
-      })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const timer = setTimeout(() => {
+      axios
+        .get("https://paytm-nu-pink.vercel.app/api/v1/user/bulk?filter=" + filter)
+        .then((response) => {
+          setUsers(response.data.user);
+        })
+        .catch((error) => {
+          console.error("Error fetching users:", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 500); // Debounce the API call
+
+    return () => clearTimeout(timer);
   }, [filter]);
 
   return (
-    <section className="relative py-16 bg-blueGray-50">
-      <div className="w-full mb-12 px-4">
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-pink-900 text-white">
-          <div className="rounded-t mb-0 px-4 py-3 border-0">
-            <div className="flex flex-wrap items-center">
-              <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                <h3 className="font-semibold text-lg text-white text-center">Users</h3>
-              </div>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-8">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto"
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <motion.h1 
+            className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"
+            whileHover={{ scale: 1.02 }}
+          >
+            Users Directory
+          </motion.h1>
+          <Button
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/signin");
+            }}
+            label={<div className="flex items-center"><FiLogOut className="mr-2" /> Sign out</div>}
+            className="bg-gradient-to-r from-red-500 to-pink-500 text-white py-2 px-4 rounded-lg hover:shadow-lg transition-all duration-200"
+          />
+        </div>
+
+        {/* Search Bar */}
+        <motion.div 
+          className="relative mb-8"
+          whileHover={{ scale: 1.01 }}
+        >
+          <div className={`flex items-center p-3 rounded-xl shadow-sm transition-all duration-200 ${searchFocus ? 'bg-white shadow-md' : 'bg-gray-100'}`}>
+            <FiSearch className={`ml-2 text-lg ${searchFocus ? 'text-blue-500' : 'text-gray-500'}`} />
+            <input
+              type="text"
+              placeholder="Search users by name..."
+              className="w-full bg-transparent border-none outline-none ml-3 text-gray-700 placeholder-gray-400"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              onFocus={() => setSearchFocus(true)}
+              onBlur={() => setSearchFocus(false)}
+            />
           </div>
-          <div className="block w-full overflow-x-auto">
-            <table className="items-center w-full bg-transparent border-collapse">
-              <thead>
-                <tr>
-                  <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700"></th>
-                  {/* <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">Actions</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan="2" className="text-center py-4">
-                      <div className="loader">
-                        <div className="inner one"></div>
-                        <div className="inner two"></div>
-                        <div className="inner three"></div>
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: searchFocus ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.div>
+
+        {/* User Cards */}
+        <div className="grid gap-4">
+          {loading ? (
+            <AnimatePresence>
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-white rounded-xl p-4 shadow-sm h-20 animate-pulse"
+                />
+              ))}
+            </AnimatePresence>
+          ) : users.length === 0 ? (
+            <motion.div 
+              className="bg-white rounded-xl p-8 text-center shadow-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <FiUser className="mx-auto text-5xl text-gray-300 mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600">No users found</h3>
+              <p className="text-gray-500 mt-2">
+                {filter ? "Try a different search term" : "There are no users to display"}
+              </p>
+            </motion.div>
+          ) : (
+            <AnimatePresence>
+              {users.map((user, index) => (
+                <motion.div
+                  key={user._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ y: -5 }}
+                  className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="rounded-full h-12 w-12 bg-gradient-to-r from-blue-500 to-purple-500 flex justify-center items-center text-white text-xl font-bold mr-4 shadow-md">
+                        {user.firstName[0]}
                       </div>
-                    </td>
-                  </tr>
-                ) : (
-                  users.map((user) => (
-                    <User key={user._id} user={user} />
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-800">
+                          {user.firstName} {user.lastName}
+                        </h3>
+                        <p className="text-sm text-gray-500">@{user.username || "user"}</p>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => navigate(`/send?id=${user._id}&name=${user.firstName}`)}
+                      label={<div className="flex items-center"><FiSend className="mr-2" /> Send</div>}
+                      className="bg-gradient-to-r from-green-500 to-teal-500 text-white py-2 px-4 rounded-lg hover:shadow-lg transition-all duration-200"
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
         </div>
-      </div>
-      <footer className="relative pt-8 pb-6 mt-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap items-center md:justify-between justify-center">
-            <div className="w-full md:w-6/12 px-4 mx-auto text-center">
-              <div className="text-sm text-blueGray-500 font-semibold py-1">
-              <Button
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  navigate("/signin");
-                }}
-                label="Sign out"
-                className="text-blueGray-500 hover:text-gray-800"
-              /> 
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </section>
+      </motion.div>
+    </div>
   );
 };
-
-// User Component
-function User({ user }) {
-  const navigate = useNavigate();
-
-  return (
-    <tr className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex flex-col items-start">
-      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-        <div className="rounded-full h-12 w-12 bg-gradient-to-r from-blue-500 to-purple-500 flex justify-center items-center text-white text-xl font-bold mr-4 shadow-md">
-          {user.firstName[0]}
-        </div>
-        <span className="ml-3 font-bold text-white">
-          {user.firstName} {user.lastName}
-        </span>
-      </th>
-      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left w-full">
-        <Button
-          onClick={() => navigate(`/send?id=${user._id}&name=${user.firstName}`)}
-          label="Send Money"
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-all duration-200 shadow-md w-full text-center"
-        />
-      </td>
-    </tr>
-  );
-}
